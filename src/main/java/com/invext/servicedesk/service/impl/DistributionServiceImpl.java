@@ -5,7 +5,6 @@ import com.invext.servicedesk.model.Attendant;
 import com.invext.servicedesk.model.Solicitation;
 import com.invext.servicedesk.model.SolicitationType;
 import com.invext.servicedesk.service.DistributionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +15,6 @@ public class DistributionServiceImpl implements DistributionService {
 
     private final QueueManager queueManager;
 
-    @Autowired
     public DistributionServiceImpl() {
         this.queueManager = QueueManager.getInstance();
     }
@@ -35,15 +33,16 @@ public class DistributionServiceImpl implements DistributionService {
         distribute(attendants, queue);
     }
 
-    private void distribute(List<Attendant> attendants, Queue<Solicitation> queue) {
-        for (Attendant attendant : attendants) {
-            while (!queue.isEmpty() && attendant.canHandleMoreRequests()) {
-                Solicitation solicitation = queue.poll();
-                if (solicitation != null) {
-                    attendant.addSolicitation(solicitation);
-                }
-            }
-        }
+    public void distribute(List<Attendant> attendants, Queue<Solicitation> queue) {
+        attendants.stream()
+                .filter(Attendant::canHandleMoreRequests) // Filtra atendentes disponíveis
+                .forEach(attendant -> {
+                    // Adiciona solicitações ao atendente enquanto ele puder atender mais e houver solicitações na fila
+                    while (attendant.canHandleMoreRequests() && !queue.isEmpty()) {
+                        Solicitation solicitation = queue.poll();
+                        attendant.addSolicitation(solicitation);
+                    }
+                });
     }
 
 }

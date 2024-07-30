@@ -4,7 +4,6 @@ import com.invext.servicedesk.model.SolicitationType;
 import com.invext.servicedesk.service.DistributionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -22,8 +21,8 @@ public class QueueScheduler {
         this.distributionService = distributionService;
     }
 
-    // Agendamento que verifica e redistribui as solicitações enfileiradas a cada 3 minutos.
-    @Scheduled(fixedDelay = 3, timeUnit = TimeUnit.MINUTES)
+    // Agendamento que verifica e redistribui as solicitações enfileiradas a cada 1 minuto.
+    @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.MINUTES)
     public void checkQueueSolicitations() {
         var dateTime = LocalDateTime.now();
         logger.info("### Running schedule at {}", dateTime);

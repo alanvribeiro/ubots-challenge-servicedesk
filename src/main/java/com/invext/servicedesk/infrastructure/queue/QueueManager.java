@@ -6,9 +6,8 @@ import com.invext.servicedesk.model.SolicitationType;
 
 import java.util.*;
 
+// Singleton que gerencia as filas de solicitações e os atendentes disponíveis para cada tipo de solicitação.
 public class QueueManager {
-
-    // Singleton que gerencia as filas de solicitações e os atendentes disponíveis para cada tipo de solicitação.
 
     private static QueueManager instance;
     private final Map<SolicitationType, Queue<Solicitation>> queues = new HashMap<>();
